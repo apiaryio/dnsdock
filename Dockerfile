@@ -1,10 +1,13 @@
-FROM golang:1.4.1
+FROM golang:1.6
 
-ADD . /go/src/github.com/tonistiigi/dnsdock
+ENV GO15VENDOREXPERIMENT 0
+ENV VERSION 1.13
 
-RUN cd /go/src/github.com/tonistiigi/dnsdock && \
+ADD . /go/src/github.com/apiaryio/dnsdock
+
+RUN cd /go/src/github.com/apiaryio/dnsdock && \
     go get -v github.com/tools/godep && \
     godep restore && \
-    go install -ldflags "-X main.version `git describe --tags HEAD``if [[ -n $(command git status --porcelain --untracked-files=no 2>/dev/null) ]]; then echo "-dirty"; fi`" ./...
+    go install -ldflags "-X main.version $VERSION" ./...
 
-ENTRYPOINT ["/go/bin/dnsdock"] 
+ENTRYPOINT ["/go/bin/dnsdock"]

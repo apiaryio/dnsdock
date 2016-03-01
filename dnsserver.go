@@ -56,7 +56,7 @@ func NewDNSServer(c *Config) *DNSServer {
 		ReadTimeout: time.Duration(c.readTimeout) * time.Second,
 		WriteTimeout: time.Duration(c.writeTimeout) * time.Second}
 
-		return s
+	return s
 }
 
 func (s *DNSServer) Start() error {

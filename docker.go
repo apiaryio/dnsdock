@@ -83,20 +83,20 @@ func (d *DockerManager) getService(id string) (*Service, error) {
 }
 
 func (d *DockerManager) eventCallback(event *dockerclient.Event, ec chan error, args ...interface{}) {
-	//log.Printf("Received event: %#v %#v\n", *event, args)
+	log.Printf("Received event: %#v %#v\n", *event, args)
 
 	switch event.Status {
 	case "die", "stop", "kill":
 		// Errors can be ignored here because there can be no-op events.
-		d.list.RemoveService(event.Id)
+		d.list.RemoveService(event.ID)
 	case "start", "restart":
-		service, err := d.getService(event.Id)
+		service, err := d.getService(event.ID)
 		if err != nil {
 			ec <- err
 			return
 		}
 
-		d.list.AddService(event.Id, *service)
+		d.list.AddService(event.ID, *service)
 	}
 }
 

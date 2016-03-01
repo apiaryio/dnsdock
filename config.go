@@ -34,6 +34,8 @@ type Config struct {
 	verbose    bool
 	httpAddr   string
 	ttl        int
+	readTimeout  int
+	writeTimeout int
 }
 
 func NewConfig() *Config {

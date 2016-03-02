@@ -29,6 +29,8 @@ func main() {
 	flag.StringVar(&config.tlsKey, "tlskey", config.tlsKey, "Path to client certificate private key")
 	flag.BoolVar(&config.verbose, "verbose", true, "Verbose output")
 	flag.IntVar(&config.ttl, "ttl", config.ttl, "TTL for matched requests")
+	flag.IntVar(&config.readTimeout, "readTimeout", config.readTimeout, "Read Timeout [s]")
+	flag.IntVar(&config.writeTimeout, "writeTimeout", config.writeTimeout, "Write Timeout [s]")
 
 	var showVersion bool
 	if len(version) > 0 {

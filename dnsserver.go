@@ -52,7 +52,9 @@ func NewDNSServer(c *Config) *DNSServer {
 	s.mux.HandleFunc("in-addr.arpa.", s.handleReverseRequest)
 	s.mux.HandleFunc(".", s.handleForward)
 
-	s.server = &dns.Server{Addr: c.dnsAddr, Net: "udp", Handler: s.mux}
+	s.server = &dns.Server{Addr: c.dnsAddr, Net: "udp", Handler: s.mux,
+		ReadTimeout: time.Duration(c.readTimeout) * time.Second,
+		WriteTimeout: time.Duration(c.writeTimeout) * time.Second}
 
 	return s
 }
@@ -216,6 +218,10 @@ func (s *DNSServer) handleRequest(w dns.ResponseWriter, r *dns.Msg) {
 	m := new(dns.Msg)
 	m.SetReply(r)
 
+	if s.config.verbose {
+		log.Println("Handling request:", m)
+	}
+
 	// Send empty response for empty requests
 	if len(r.Question) == 0 {
 		m.Ns = s.createSOA()
@@ -265,6 +271,9 @@ func (s *DNSServer) handleRequest(w dns.ResponseWriter, r *dns.Msg) {
 	}
 
 	w.WriteMsg(m)
+	if s.config.verbose {
+		log.Println("Handled: ", m)
+	}
 }
 
 func (s *DNSServer) handleReverseRequest(w dns.ResponseWriter, r *dns.Msg) {
@@ -350,6 +359,10 @@ func (s *DNSServer) queryServices(query string) chan *Service {
 	go func() {
 		query := strings.Split(strings.ToLower(query), ".")
 
+		if s.config.verbose {
+			log.Println("Query: ", query)
+		}
+
 		defer s.lock.RUnlock()
 		s.lock.RLock()
 
@@ -366,14 +379,22 @@ func (s *DNSServer) queryServices(query string) chan *Service {
 			}
 
 			test = append(test, s.config.domain...)
-
+			if s.config.verbose {
+				log.Println("Service: ", test)
+			}
 			if isPrefixQuery(query, test) {
+				if s.config.verbose {
+					log.Println("Test ", test, " is prefix query")
+				}
 				c <- service
 			}
 
 			// check aliases
 			for _, alias := range service.Aliases {
 				if isPrefixQuery(query, strings.Split(alias, ".")) {
+					if s.config.verbose {
+						log.Println("Alias ", alias, " is prefix query")
+					}
 					c <- service
 				}
 			}

@@ -1,10 +1,19 @@
-FROM golang:1.4.1
+FROM golang:1.6
 
-ADD . /go/src/github.com/tonistiigi/dnsdock
+ENV GO15VENDOREXPERIMENT 1
+ENV VERSION 1.13.1
 
-RUN cd /go/src/github.com/tonistiigi/dnsdock && \
-    go get -v github.com/tools/godep && \
-    godep restore && \
-    go install -ldflags "-X main.version `git describe --tags HEAD``if [[ -n $(command git status --porcelain --untracked-files=no 2>/dev/null) ]]; then echo "-dirty"; fi`" ./...
+ADD . /go/src/github.com/apiaryio/dnsdock
 
-ENTRYPOINT ["/go/bin/dnsdock"] 
+ADD https://github.com/Masterminds/glide/releases/download/0.9.1/glide-0.9.1-linux-amd64.tar.gz /tmp/glide-0.9.1-linux-amd64.tar.gz
+RUN cd /tmp && \
+    tar -zxvf /tmp/glide-0.9.1-linux-amd64.tar.gz && \
+    cp /tmp/linux-amd64/glide /usr/local/bin/glide && \
+    chmod 755 /usr/local/bin/glide && \
+    rm /tmp/glide-0.9.1-linux-amd64.tar.gz && rm -rf /tmp/linux-amd64/
+
+RUN cd /go/src/github.com/apiaryio/dnsdock && \
+    glide install && \
+    go install -ldflags "-X main.version=$VERSION" ./...
+
+ENTRYPOINT ["/go/bin/dnsdock"]

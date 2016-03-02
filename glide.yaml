@@ -1,0 +1,15 @@
+package: github.com/apiaryio/dnsdock
+import:
+- package: github.com/docker/go-units
+  version: 5d2041e26a699eaca682e2ea41c8f891e1060444
+- package: github.com/gorilla/context
+  version: 1ea25387ff6f684839d82767c1733ff4d4d15d0a
+- package: github.com/gorilla/mux
+  version: c9e326e2bdec29039a3761c07bece13133863e1e
+- package: github.com/miekg/dns
+  version: cce6c130cdb92c752850880fd285bea1d64439dd
+- package: github.com/samalba/dockerclient
+  version: f274bbd0e2eb35ad1444dc6e6660214f9fbbc08c
+- package: github.com/stretchr/testify
+  subpackages:
+  - mock

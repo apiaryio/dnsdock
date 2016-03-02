@@ -1,8 +1,8 @@
 language: go
 
 go:
-    - 1.4
+    - 1.6
 
 before_script:
 
-script: make test
+script: GO15VENDOREXPERIMENT=1 make test

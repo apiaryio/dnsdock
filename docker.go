@@ -83,7 +83,7 @@ func (d *DockerManager) getService(id string) (*Service, error) {
 }
 
 func (d *DockerManager) eventCallback(event *dockerclient.Event, ec chan error, args ...interface{}) {
-	log.Printf("Received event: %#v %#v\n", *event, args)
+	// log.Printf("Received event: %#v %#v\n", *event, args)
 
 	switch event.Status {
 	case "die", "stop", "kill":

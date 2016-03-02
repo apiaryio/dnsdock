@@ -5,4 +5,4 @@ go:
 
 before_script:
 
-script: make test
+script: GO15VENDOREXPERIMENT=1 make test

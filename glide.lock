@@ -1,0 +1,18 @@
+hash: 4a05bf3d141441d4fb9e88bf852c25d2ce323f98f7eb950da0b173659a66a167
+updated: 2016-03-02T13:36:58.083063919+01:00
+imports:
+- name: github.com/docker/go-units
+  version: ""
+- name: github.com/gorilla/context
+  version: ""
+- name: github.com/gorilla/mux
+  version: ""
+- name: github.com/miekg/dns
+  version: ""
+- name: github.com/samalba/dockerclient
+  version: ""
+- name: github.com/stretchr/testify
+  version: 1f4a1643a57e798696635ea4c126e9127adb7d3c
+  subpackages:
+  - mock
+devImports: []

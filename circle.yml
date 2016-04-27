@@ -9,7 +9,7 @@ dependencies:
 
 test:
   override:
-    - docker run -ti -v /var/run/docker.sock:/var/run/docker.sock --entrypoint=/bin/bash apiaryio/dnsdock -c make test
+    - docker run -v /var/run/docker.sock:/var/run/docker.sock --entrypoint=/bin/bash apiaryio/dnsdock -c make test
 
 deployment:
   production:

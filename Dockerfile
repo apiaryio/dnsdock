@@ -16,4 +16,5 @@ RUN cd /go/src/github.com/apiaryio/dnsdock && \
     glide install && \
     go install -ldflags "-X main.version=$VERSION" ./...
 
+WORKDIR /go/src/github.com/apiaryio/dnsdock
 ENTRYPOINT ["/go/bin/dnsdock"]

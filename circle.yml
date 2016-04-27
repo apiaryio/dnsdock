@@ -1,0 +1,18 @@
+machine:
+  services:
+    - docker
+
+dependencies:
+  override:
+    - docker info
+    - docker build -t apiaryio/dnsdock .
+
+test:
+  override:
+    - docker logs $(docker run -d -v /var/run/docker.sock:/var/run/docker.sock -p $(ip route | awk '/docker/ { print $NF }'):53:53/udp apiaryio/dnsdock)
+
+deployment:
+  production:
+    branch: production
+    commands:
+      - docker push apiaryio/dnsdock:latest

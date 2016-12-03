@@ -1,7 +1,9 @@
-FROM golang:1.6
+FROM golang:1.6-alpine
 
 ENV GO15VENDOREXPERIMENT 1
 ENV VERSION 1.13.1
+
+RUN apk add --update git
 
 ADD . /go/src/github.com/apiaryio/dnsdock
 

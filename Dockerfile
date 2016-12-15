@@ -1,22 +1,12 @@
-FROM golang:1.6-alpine
+FROM alpine
+MAINTAINER sre@apiary.io
 
-ENV GO15VENDOREXPERIMENT 1
-ENV VERSION 1.13.1
+ENV REFRESHED_AT 2016-12-15
 
-RUN apk add --update git
+RUN mkdir -p /go/bin && chmod -R 777 /go
+ENV GOPATH /go
+ENV PATH /go/bin:$PATH
 
-ADD . /go/src/github.com/apiaryio/dnsdock
+COPY bin/dnsdock /go/bin
 
-ADD https://github.com/Masterminds/glide/releases/download/0.9.1/glide-0.9.1-linux-amd64.tar.gz /tmp/glide-0.9.1-linux-amd64.tar.gz
-RUN cd /tmp && \
-    tar -zxvf /tmp/glide-0.9.1-linux-amd64.tar.gz && \
-    cp /tmp/linux-amd64/glide /usr/local/bin/glide && \
-    chmod 755 /usr/local/bin/glide && \
-    rm /tmp/glide-0.9.1-linux-amd64.tar.gz && rm -rf /tmp/linux-amd64/
-
-RUN cd /go/src/github.com/apiaryio/dnsdock && \
-    glide install && \
-    go install -ldflags "-X main.version=$VERSION" ./...
-
-WORKDIR /go/src/github.com/apiaryio/dnsdock
 ENTRYPOINT ["/go/bin/dnsdock"]

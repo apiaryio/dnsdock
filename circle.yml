@@ -5,7 +5,7 @@ machine:
 dependencies:
   override:
     - docker info
-    - docker build -t apiaryio/dnsdock .
+    - ./scripts/docker-build.sh
 
 test:
   override:
